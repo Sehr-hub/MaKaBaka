@@ -18,6 +18,7 @@ public class IndicatorAdapter extends CommonNavigatorAdapter {
 
 
     private final String[] mTitles;
+    private OnIndicatorTapClickListener mOnTapClickListener;
 
     public IndicatorAdapter(Context context) {
         mTitles = context.getResources().getStringArray(R.array.indicator_title);
@@ -50,7 +51,9 @@ public class IndicatorAdapter extends CommonNavigatorAdapter {
             @Override
             public void onClick(View view) {
                 //切换viewPager的内容，如果index不一样的话。
-               //TOOD;
+               if(mOnTapClickListener!=null){
+                   mOnTapClickListener.onTabClick(index);
+               }
             }
         });
         //把这个创建好的view返回回去
@@ -64,4 +67,13 @@ public class IndicatorAdapter extends CommonNavigatorAdapter {
         indicator.setColors(Color.parseColor("#ffffff"));
         return indicator;
     }
+
+    public void setOnIndicatorTapClickListener(OnIndicatorTapClickListener listener){
+        this.mOnTapClickListener=listener;
+    }
+
+    public interface OnIndicatorTapClickListener{
+        void onTabClick(int index);
+    }
+
 }
