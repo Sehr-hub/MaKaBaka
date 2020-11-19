@@ -16,6 +16,7 @@ import com.example.makabaka.interfaces.IRecommendCallBack;
 import com.example.makabaka.presenters.RecommendPresenter;
 import com.example.makabaka.utils.Constants;
 import com.example.makabaka.utils.LogUtils;
+import com.example.makabaka.views.UILoader;
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
 import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
 import com.ximalaya.ting.android.opensdk.datatrasfer.IDataCallBack;
@@ -31,13 +32,32 @@ import java.util.Map;
 
 public class RecommendFragment extends BaseFragment implements IRecommendCallBack {
     private static final String TAG = "RecommendFragment";
+    private View rootView;
     private RecyclerView mRecommendRecyclerView;
     private RecommendListAdapter mRecommendListAdapter;
     private RecommendPresenter mRecommendPresenter;
+    private UILoader mUiLoader;
 
     @Override
-    protected View onSubViewLoaded(LayoutInflater mLayoutInflater, ViewGroup container) {
-        View rootView= mLayoutInflater.inflate(R.layout.fragment_recommend,container,false);
+    protected View onSubViewLoaded(LayoutInflater layoutInflater, ViewGroup container) {
+        mUiLoader = new UILoader(getContext()) {
+            @Override
+            protected View getSuccessView(ViewGroup cotainer) {
+                return createSuccessView(layoutInflater,container) ;
+            }
+
+        };
+        //获取逻辑层的对象
+        mRecommendPresenter = RecommendPresenter.getInstance();
+        //设置通知接口的注册
+        mRecommendPresenter.registerViewCallBack(this);
+        //获取推荐列表
+        mRecommendPresenter.getRecommendList();
+        return mUiLoader;
+    }
+
+    private View createSuccessView(LayoutInflater layoutInflater,ViewGroup container) {
+        rootView= layoutInflater.inflate(R.layout.fragment_recommend,container,false);
         mRecommendRecyclerView = rootView.findViewById(R.id.recommend_list);
         //设置布局管理器
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
@@ -56,12 +76,6 @@ public class RecommendFragment extends BaseFragment implements IRecommendCallBac
         //设置适配器
         mRecommendListAdapter = new RecommendListAdapter();
         mRecommendRecyclerView.setAdapter(mRecommendListAdapter);
-        //获取逻辑层的对象
-        mRecommendPresenter = RecommendPresenter.getInstance();
-        //设置通知接口的注册
-        mRecommendPresenter.registerViewCallBack(this);
-        //获取推荐列表
-        mRecommendPresenter.getRecommendList();
         return rootView;
     }
 
@@ -70,16 +84,22 @@ public class RecommendFragment extends BaseFragment implements IRecommendCallBac
     public void onRecommendListLoaded(List<Album> result) {
         //成功获取到推荐内容后，调用这个方法以进行UI更新
         mRecommendListAdapter.setData(result);
+        mUiLoader.updateStatus(UILoader.UIStatus.SUCCESS);
     }
 
     @Override
-    public void onLoaderMore(List<Album> result) {
-
+    public void onNetworkError() {
+        mUiLoader.updateStatus(UILoader.UIStatus.NETWORK_ERROR);
     }
 
     @Override
-    public void onRefreshMore(List<Album> result) {
+    public void onLoading() {
+        mUiLoader.updateStatus(UILoader.UIStatus.LOADING);
+    }
 
+    @Override
+    public void onEmpty() {
+        mUiLoader.updateStatus(UILoader.UIStatus.EMPTY);
     }
 
     @Override

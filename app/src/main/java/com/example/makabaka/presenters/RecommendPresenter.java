@@ -40,6 +40,7 @@ public class RecommendPresenter implements IRecommendPresenter {
      * */
     @Override
     public void getRecommendList() {
+        updateLoading();
         //封装参数
         Map<String, String> map = new HashMap<>();
         map.put(DTransferConstants.LIKE_COUNT, Constants.RECOMMEND_COUNT+"");
@@ -59,30 +60,43 @@ public class RecommendPresenter implements IRecommendPresenter {
                 //获取出错
                 LogUtils.d(TAG,"error-->"+i);
                 LogUtils.d(TAG,"errorMessage-->"+s);
+                handlerError();
             }
         });
 
     }
 
-
-
-    private void handlerRecommendResult(List<Album> albumList) {
+    private void handlerError() {
         if(mCallbacks!=null){
             for(IRecommendCallBack callBack:mCallbacks){
-                callBack.onRecommendListLoaded(albumList);
+                callBack.onNetworkError();
             }
         }
     }
 
-    @Override
-    public void pull2RefreshMore() {
 
+    private void handlerRecommendResult(List<Album> albumList) {   //对返回的推荐数据进行处理
+        //通知UI进行更新
+        if(albumList!=null){
+            if(albumList.size()==0){
+                for(IRecommendCallBack callBack:mCallbacks){
+                    callBack.onEmpty();
+                }
+            }
+            else {
+                for(IRecommendCallBack callBack:mCallbacks){
+                    callBack.onRecommendListLoaded(albumList);
+                }
+            }
+        }
     }
 
-    @Override
-    public void loadMore() {
-
+    private void updateLoading(){
+        for(IRecommendCallBack callBack:mCallbacks){
+            callBack.onLoading();
+        }
     }
+
 
     @Override
     public void registerViewCallBack(IRecommendCallBack callback) {
