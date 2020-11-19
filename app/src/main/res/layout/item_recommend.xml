@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="#ffffff"
+    android:background="@drawable/shape_item_bg"
     android:layout_height="75dp">
 
-    <ImageView
+    <com.example.makabaka.views.RoundRectImageView
         android:id="@+id/album_cover"
         android:layout_width="68dp"
-        android:background="@color/main_color"
         android:layout_centerVertical="true"
+        android:scaleType="fitXY"
         android:layout_marginLeft="5dp"
         android:layout_height="65dp"/>
 
