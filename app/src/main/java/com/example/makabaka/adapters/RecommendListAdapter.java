@@ -19,6 +19,7 @@ import java.util.List;
 public class RecommendListAdapter extends RecyclerView.Adapter<RecommendListAdapter.InnerHolder> {
 
     private List<Album> mData=new ArrayList<>();
+    private OnRecommendItemClickListener mItemClickListener=null;
 
     @NonNull
     @Override
@@ -33,6 +34,14 @@ public class RecommendListAdapter extends RecyclerView.Adapter<RecommendListAdap
     public void onBindViewHolder(@NonNull InnerHolder holder, int position) {
         //设置数据
         holder.itemView.setTag(position);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mItemClickListener!=null){
+                    mItemClickListener.onItemClick(position,mData.get(position));
+                }
+            }
+        });
         holder.setData(mData.get(position));
     }
 
@@ -71,4 +80,13 @@ public class RecommendListAdapter extends RecyclerView.Adapter<RecommendListAdap
             Picasso.with(itemView.getContext()).load(album.getCoverUrlLarge()).into(albumCover);
         }
     }
+
+    public void setOnRecommendItemClickListener(OnRecommendItemClickListener listener){
+        this.mItemClickListener=listener;
+    }
+
+    public interface OnRecommendItemClickListener{
+        void onItemClick(int position, Album album);
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.example.makabaka.fragments;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,28 +10,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.makabaka.DetailActivity;
 import com.example.makabaka.R;
 import com.example.makabaka.adapters.RecommendListAdapter;
 import com.example.makabaka.base.BaseFragment;
 import com.example.makabaka.interfaces.IRecommendCallBack;
+import com.example.makabaka.presenters.AlbumDetailPresenter;
 import com.example.makabaka.presenters.RecommendPresenter;
-import com.example.makabaka.utils.Constants;
-import com.example.makabaka.utils.LogUtils;
 import com.example.makabaka.views.UILoader;
-import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
-import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
-import com.ximalaya.ting.android.opensdk.datatrasfer.IDataCallBack;
-import com.ximalaya.ting.android.opensdk.httputil.httpswitch.OkHttpRequest;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
-import com.ximalaya.ting.android.opensdk.model.album.GussLikeAlbumList;
 
 import net.lucode.hackware.magicindicator.buildins.UIUtil;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class RecommendFragment extends BaseFragment implements IRecommendCallBack, UILoader.onRetryClickListener {
+public class RecommendFragment extends BaseFragment implements IRecommendCallBack, UILoader.onRetryClickListener, RecommendListAdapter.OnRecommendItemClickListener {
     private static final String TAG = "RecommendFragment";
     private View rootView;
     private RecyclerView mRecommendRecyclerView;
@@ -80,6 +74,7 @@ public class RecommendFragment extends BaseFragment implements IRecommendCallBac
         //设置适配器
         mRecommendListAdapter = new RecommendListAdapter();
         mRecommendRecyclerView.setAdapter(mRecommendListAdapter);
+        mRecommendListAdapter.setOnRecommendItemClickListener(this);
         return rootView;
     }
 
@@ -121,5 +116,14 @@ public class RecommendFragment extends BaseFragment implements IRecommendCallBac
         if(mRecommendPresenter!=null){
             mRecommendPresenter.getRecommendList();
         }
+    }
+
+    @Override
+    public void onItemClick(int position, Album album) {
+        //item被点击后跳转到详情页
+        AlbumDetailPresenter.getInstance().setTargetAlbum(album);
+        Intent intent=new Intent(getContext(), DetailActivity.class);
+        startActivity(intent);
+
     }
 }
