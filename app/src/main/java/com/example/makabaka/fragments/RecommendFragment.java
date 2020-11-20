@@ -30,7 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RecommendFragment extends BaseFragment implements IRecommendCallBack {
+public class RecommendFragment extends BaseFragment implements IRecommendCallBack, UILoader.onRetryClickListener {
     private static final String TAG = "RecommendFragment";
     private View rootView;
     private RecyclerView mRecommendRecyclerView;
@@ -53,6 +53,10 @@ public class RecommendFragment extends BaseFragment implements IRecommendCallBac
         mRecommendPresenter.registerViewCallBack(this);
         //获取推荐列表
         mRecommendPresenter.getRecommendList();
+        if(mUiLoader.getParent() instanceof ViewGroup){    //解绑父类，绑定时不能正确返回
+            ((ViewGroup)mUiLoader.getParent()).removeView(mUiLoader);
+        }
+        mUiLoader.setOnRetryClickListener(this);
         return mUiLoader;
     }
 
@@ -108,6 +112,14 @@ public class RecommendFragment extends BaseFragment implements IRecommendCallBac
         //取消接口注册
         if(mRecommendPresenter!=null){
             mRecommendPresenter.unRegisterViewCallBack(this);
+        }
+    }
+
+    @Override
+    public void onRetryClick() {
+        //用户点击重试重新获取数据
+        if(mRecommendPresenter!=null){
+            mRecommendPresenter.getRecommendList();
         }
     }
 }
