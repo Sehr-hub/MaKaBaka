@@ -65,6 +65,16 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //释放资源
+        if (mAlbumDetailPresenter!=null) {
+            mAlbumDetailPresenter.unRegisterViewCallBack(this);
+            mAlbumDetailPresenter=null;
+        }
+    }
+
     private void initView() {
         mDetailListContainer = this.findViewById(R.id.detail_list_container);
         if(mUiLoader==null) {

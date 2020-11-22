@@ -16,7 +16,7 @@ public interface IPlayerCallback {
     void onPrePlay(Track track);//播放上一首
     void onListLoaded(List<Track> list);//播放列表数据加载完成
     void onPlayModeChange(XmPlayListControl.PlayMode playMode);//切换播放模式
-    void onProgressChange(long currentProgress,long total);//切换播放进度
+    void onProgressChange(int currPos,int duration);//切换播放进度
     void onAdLoading();//广告正在加载
     void onAdFinished();//广告结束
 

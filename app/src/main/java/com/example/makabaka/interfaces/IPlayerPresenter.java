@@ -14,5 +14,6 @@ public interface IPlayerPresenter extends IBasePresenter<IPlayerCallback> {
     void getPlayList();//获取播放列表
     void playByIndex(int index);//根据播放列表的节目位置切换节目
     void seekTo(int progress);//拖动切换播放进度
+    boolean isPlay();//判断播放器播放状态
 
 }
