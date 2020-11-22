@@ -1,15 +1,18 @@
 package com.example.makabaka.base;
 
 import android.app.Application;
+import android.content.Context;
 import android.os.Handler;
 
 import com.example.makabaka.utils.LogUtils;
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
 import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
+import com.ximalaya.ting.android.opensdk.player.XmPlayerManager;
 
 public class BaseApplication extends Application {
 
     private static Handler sHandler=null;
+    private static Context sContext=null;
 
     @Override
     public void onCreate() {
@@ -26,12 +29,20 @@ public class BaseApplication extends Application {
             mXimalaya.setPackid("com.ximalaya.qunfeng");
             mXimalaya.init(this ,mAppSecret);
         }
+
+        //初始化播放器
+        XmPlayerManager.getInstance(this).init();
+
         //初始化LogUtil
         LogUtils.init(this.getPackageName(), true);
         sHandler=new Handler();
+        sContext=getBaseContext();
     }
 
     public static Handler getHandler(){
         return sHandler;
+    }
+    public static Context getAppContext(){
+        return sContext;
     }
 }

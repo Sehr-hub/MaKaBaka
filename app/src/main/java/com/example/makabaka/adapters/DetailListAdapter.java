@@ -50,7 +50,8 @@ public class DetailListAdapter  extends RecyclerView.Adapter<DetailListAdapter.I
             @Override
             public void onClick(View v) {
                 if(mItemClickListener!=null){
-                    mItemClickListener.onItemClick();
+                    //点击播放时传递列表和位置参数
+                    mItemClickListener.onItemClick(mDetailData,position);
                 }
             }
         });
@@ -82,7 +83,7 @@ public class DetailListAdapter  extends RecyclerView.Adapter<DetailListAdapter.I
     }
 
     public interface ItemClickListener{
-        void onItemClick();
+        void onItemClick(List<Track> detailData, int position);
     }
 
 }

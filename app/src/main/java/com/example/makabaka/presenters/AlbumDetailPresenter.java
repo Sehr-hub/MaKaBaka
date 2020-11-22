@@ -90,7 +90,7 @@ public class AlbumDetailPresenter implements IAlbumDetailPresenter {
     }
 
     @Override
-    public void registerViewCallback(IAlbumDetailViewCallback albumDetailViewCallback) {
+    public void registerViewCallBack(IAlbumDetailViewCallback albumDetailViewCallback) {
         if(!mCallbacks.contains(albumDetailViewCallback)){
             mCallbacks.add(albumDetailViewCallback);
             if(mTargetAlbum!=null){
@@ -100,7 +100,7 @@ public class AlbumDetailPresenter implements IAlbumDetailPresenter {
     }
 
     @Override
-    public void unregisterViewCallback(IAlbumDetailViewCallback albumDetailViewCallback) {
+    public void unRegisterViewCallBack(IAlbumDetailViewCallback albumDetailViewCallback) {
         mCallbacks.remove(albumDetailViewCallback);
     }
 

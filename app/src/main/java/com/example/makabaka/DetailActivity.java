@@ -7,7 +7,6 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +22,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.makabaka.adapters.DetailListAdapter;
 import com.example.makabaka.base.BaseActivity;
-import com.example.makabaka.interfaces.IAlbumDetailPresenter;
 import com.example.makabaka.interfaces.IAlbumDetailViewCallback;
 import com.example.makabaka.presenters.AlbumDetailPresenter;
+import com.example.makabaka.presenters.PlayerPresenter;
 import com.example.makabaka.utils.ImageBlur;
 import com.example.makabaka.utils.LogUtils;
 import com.example.makabaka.views.RoundRectImageView;
@@ -62,7 +61,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         getWindow().setStatusBarColor(Color.TRANSPARENT);
         initView();
         mAlbumDetailPresenter = AlbumDetailPresenter.getInstance();
-        mAlbumDetailPresenter.registerViewCallback(this);
+        mAlbumDetailPresenter.registerViewCallBack(this);
 
     }
 
@@ -172,7 +171,10 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     }
 
     @Override
-    public void onItemClick() {
+    public void onItemClick(List<Track> detailData, int position) {
+        //设置播放器数据
+        PlayerPresenter playerPresenter=PlayerPresenter.getPlayerPresenter();
+        playerPresenter.setPlayerList(detailData,position);
         //点击转跳播放页实现
         Intent intent=new Intent(this,PlayerActivity.class);
         startActivity(intent);
