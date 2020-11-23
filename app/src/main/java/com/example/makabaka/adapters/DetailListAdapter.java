@@ -19,7 +19,8 @@ public class DetailListAdapter  extends RecyclerView.Adapter<DetailListAdapter.I
 
     private List<Track> mDetailData=new ArrayList<>();
     private SimpleDateFormat mSimpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
-    private SimpleDateFormat mDurationFormat=new SimpleDateFormat("mm:ss");
+    private SimpleDateFormat mMinDurationFormat=new SimpleDateFormat("mm:ss");
+    private SimpleDateFormat mHourDurationFormat=new SimpleDateFormat("hh:mm:ss");
     private ItemClickListener mItemClickListener=null;
 
     @NonNull
@@ -43,7 +44,11 @@ public class DetailListAdapter  extends RecyclerView.Adapter<DetailListAdapter.I
         orderTv.setText(position+1+"");
         titleTv.setText(track.getTrackTitle());
         playCountTv.setText(track.getPlayCount()+"");
-        durationTv.setText(mDurationFormat.format(track.getDuration()*1000));
+        if(track.getDuration()>60*60){
+            durationTv.setText(mHourDurationFormat.format(track.getDuration()*1000));
+        }else {
+            durationTv.setText(mMinDurationFormat.format(track.getDuration()*1000));
+        }
         upDateTv.setText(mSimpleDateFormat.format(track.getUpdatedAt()));
         //设置点击事件
         itemView.setOnClickListener(new View.OnClickListener() {

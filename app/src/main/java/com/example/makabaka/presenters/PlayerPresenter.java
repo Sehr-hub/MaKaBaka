@@ -25,6 +25,8 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
     private String TAG="PlayerPresenter";
     private XmPlayerManager mPlayerManager;
     private List<IPlayerCallback> mIPlayerCallbacks=new ArrayList<>();
+    private Track mTrack;
+    private String mTrackTitle;
 
     private PlayerPresenter(){
         //获取播放器单例
@@ -54,6 +56,8 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
         if (mPlayerManager!=null) {
             mPlayerManager.setPlayList(list,playIndex);
             isPlayListSet=true;
+            mTrack = list.get(playIndex);
+            mTrackTitle = mTrack.getTrackTitle();
         }else{
             LogUtils.d(TAG,"mPlayerManager is null");
         }
@@ -80,12 +84,16 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
 
     @Override
     public void playPre() {
-
+        if (mPlayerManager != null) {
+            mPlayerManager.playPre();
+        }
     }
 
     @Override
     public void playNext() {
-
+        if (mPlayerManager != null) {
+            mPlayerManager.playNext();
+        }
     }
 
     @Override
@@ -116,6 +124,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
 
     @Override
     public void registerViewCallBack(IPlayerCallback iPlayerCallback) {
+        iPlayerCallback.onTrackTitleUpdate(mTrackTitle);
         if (!mIPlayerCallbacks.contains(iPlayerCallback)) {
             mIPlayerCallbacks.add(iPlayerCallback);
         }
@@ -167,7 +176,13 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
      */
     @Override
     public void onSoundSwitch(PlayableModel lastModel, PlayableModel curModel) {
-        LogUtils.d(TAG,"onSoundSwitch");
+        if(curModel instanceof Track){
+            mTrack=(Track)curModel;
+            for (IPlayerCallback iPlayerCallback : mIPlayerCallbacks) {
+                iPlayerCallback.onTrackTitleUpdate(mTrack.getTrackTitle());
+            }
+        }
+
     }
 
     @Override
