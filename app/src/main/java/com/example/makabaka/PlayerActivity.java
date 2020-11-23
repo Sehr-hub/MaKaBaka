@@ -7,7 +7,9 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.viewpager.widget.ViewPager;
 
+import com.example.makabaka.adapters.PlayerTrackPagerAdapter;
 import com.example.makabaka.base.BaseActivity;
 import com.example.makabaka.interfaces.IPlayerCallback;
 import com.example.makabaka.presenters.PlayerPresenter;
@@ -31,6 +33,8 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
     private ImageView mPlayNextBtn;
     private ImageView mPlayPreBtn;
     private TextView mTrackTitle;
+    private ViewPager mTrackPageView;
+    private PlayerTrackPagerAdapter mTrackPagerAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,6 +43,7 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
         initView();
         mPlayerPresenter = PlayerPresenter.getPlayerPresenter();
         mPlayerPresenter.registerViewCallBack(this);
+        mPlayerPresenter.getPlayList();
         initEvent();
         startPlay();           //进入播放页后默认开始播放
     }
@@ -111,7 +116,11 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
         mPlayNextBtn = this.findViewById(R.id.play_next);
         mPlayPreBtn = this.findViewById(R.id.play_pre);
         mTrackTitle = this.findViewById(R.id.track_title);
-
+        mTrackPageView = this.findViewById(R.id.track_page_view);
+        //创建适配器
+        mTrackPagerAdapter = new PlayerTrackPagerAdapter();
+        //配置适配器
+        mTrackPageView.setAdapter(mTrackPagerAdapter);
     }
 
     @Override
@@ -164,7 +173,10 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
 
     @Override
     public void onListLoaded(List<Track> list) {
-
+        //设置数据到适配器
+        if (mTrackPagerAdapter != null) {
+            mTrackPagerAdapter.setData(list);
+        }
     }
 
     @Override
@@ -210,10 +222,10 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
     }
 
     @Override
-    public void onTrackTitleUpdate(String title) {
+    public  void onTrackUpdate(Track track) {
         //设置当前界面标题
         if (mTrackTitle != null) {
-            mTrackTitle.setText(title);
+            mTrackTitle.setText(track.getTrackTitle());
         }
     }
     //========================播放器相关回调函数=================

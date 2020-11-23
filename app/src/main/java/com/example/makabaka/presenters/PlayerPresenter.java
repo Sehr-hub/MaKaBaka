@@ -26,7 +26,6 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
     private XmPlayerManager mPlayerManager;
     private List<IPlayerCallback> mIPlayerCallbacks=new ArrayList<>();
     private Track mTrack;
-    private String mTrackTitle;
 
     private PlayerPresenter(){
         //获取播放器单例
@@ -35,6 +34,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
         mPlayerManager.addAdsStatusListener(this);
         //注册播放器状态相关回调接口
         mPlayerManager.addPlayerStatusListener(this);
+
     }
 
     private static PlayerPresenter sPlayerPresenter;
@@ -57,7 +57,6 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
             mPlayerManager.setPlayList(list,playIndex);
             isPlayListSet=true;
             mTrack = list.get(playIndex);
-            mTrackTitle = mTrack.getTrackTitle();
         }else{
             LogUtils.d(TAG,"mPlayerManager is null");
         }
@@ -103,7 +102,12 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
 
     @Override
     public void getPlayList() {
-
+        if (mPlayerManager != null) {
+            List<Track> playList=mPlayerManager.getPlayList();
+            for(IPlayerCallback iPlayerCallback:mIPlayerCallbacks){
+                iPlayerCallback.onListLoaded(playList);
+            }
+        }
     }
 
     @Override
@@ -124,7 +128,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
 
     @Override
     public void registerViewCallBack(IPlayerCallback iPlayerCallback) {
-        iPlayerCallback.onTrackTitleUpdate(mTrackTitle);
+        iPlayerCallback.onTrackUpdate(mTrack);
         if (!mIPlayerCallbacks.contains(iPlayerCallback)) {
             mIPlayerCallbacks.add(iPlayerCallback);
         }
@@ -179,7 +183,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
         if(curModel instanceof Track){
             mTrack=(Track)curModel;
             for (IPlayerCallback iPlayerCallback : mIPlayerCallbacks) {
-                iPlayerCallback.onTrackTitleUpdate(mTrack.getTrackTitle());
+                iPlayerCallback.onTrackUpdate(mTrack);
             }
         }
 

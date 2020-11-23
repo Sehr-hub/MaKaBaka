@@ -5,7 +5,7 @@
     <TextView
         android:id="@+id/track_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:layout_marginTop="30dp"
         android:textSize="20sp"
         android:gravity="center"
@@ -16,11 +16,12 @@
         android:text="播放页"/>
 
     <androidx.viewpager.widget.ViewPager
+        android:id="@+id/track_page_view"
         android:layout_below="@+id/track_title"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="100dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="450dp"/>
 
     <LinearLayout
         android:layout_alignParentBottom="true"
