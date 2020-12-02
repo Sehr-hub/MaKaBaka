@@ -1,6 +1,8 @@
 package com.example.makabaka;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -35,6 +37,7 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
     private TextView mTrackTitle;
     private ViewPager mTrackPageView;
     private PlayerTrackPagerAdapter mTrackPagerAdapter;
+    private boolean mIsUserSlidePager=false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,15 +48,10 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
         mPlayerPresenter.registerViewCallBack(this);
         mPlayerPresenter.getPlayList();
         initEvent();
-        startPlay();           //进入播放页后默认开始播放
     }
 
-    private void startPlay() {
-        if (mPlayerPresenter!=null) {
-            mPlayerPresenter.play();
-        }
-    }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initEvent() {
         //给控件设置相关事件
         //播放暂停事件
@@ -104,6 +102,39 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
                 if (mPlayerPresenter != null) {
                     mPlayerPresenter.playNext();
                 }
+            }
+        });
+        //用户滑动播放器图片监听
+        mTrackPageView.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                //页面选中时切换播放内容
+                if (mPlayerPresenter != null&& mIsUserSlidePager==true) {
+                    mPlayerPresenter.playByIndex(position);
+                }
+                mIsUserSlidePager=false;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        mTrackPageView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action=event.getAction();
+                switch (action){
+                    case MotionEvent.ACTION_DOWN:
+                        mIsUserSlidePager=true;
+                    break;
+                }
+                return false;
             }
         });
     }
@@ -222,11 +253,16 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
     }
 
     @Override
-    public  void onTrackUpdate(Track track) {
+    public void onTrackUpdate(Track track, int playIndex) {
         //设置当前界面标题
         if (mTrackTitle != null) {
             mTrackTitle.setText(track.getTrackTitle());
         }
+        //节目改变后，也需要更改播放器页面的图片
+        if(mTrackPageView!=null){
+            mTrackPageView.setCurrentItem(playIndex,true);
+        }
     }
+
     //========================播放器相关回调函数=================
 }

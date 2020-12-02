@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import com.example.makabaka.adapters.IndicatorAdapter;
 import com.example.makabaka.adapters.MainContentAdapetr;
+import com.example.makabaka.data.DBHelper;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -27,6 +28,8 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
         initView();
         initEvent();
+
+
     }
 
     private void initEvent() {

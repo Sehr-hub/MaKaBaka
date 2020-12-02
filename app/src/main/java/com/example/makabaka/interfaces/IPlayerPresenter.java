@@ -1,5 +1,6 @@
 package com.example.makabaka.interfaces;
 
+import com.example.makabaka.DetailActivity;
 import com.example.makabaka.base.IBasePresenter;
 import com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl;
 

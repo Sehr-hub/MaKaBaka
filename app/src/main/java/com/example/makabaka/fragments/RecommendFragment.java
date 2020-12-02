@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.makabaka.DetailActivity;
 import com.example.makabaka.R;
-import com.example.makabaka.adapters.RecommendListAdapter;
+import com.example.makabaka.adapters.AlbumListAdapter;
 import com.example.makabaka.base.BaseFragment;
 import com.example.makabaka.interfaces.IRecommendCallBack;
 import com.example.makabaka.presenters.AlbumDetailPresenter;
@@ -24,11 +24,11 @@ import net.lucode.hackware.magicindicator.buildins.UIUtil;
 
 import java.util.List;
 
-public class RecommendFragment extends BaseFragment implements IRecommendCallBack, UILoader.onRetryClickListener, RecommendListAdapter.OnRecommendItemClickListener {
+public class RecommendFragment extends BaseFragment implements IRecommendCallBack, UILoader.onRetryClickListener, AlbumListAdapter.OnRecommendItemClickListener {
     private static final String TAG = "RecommendFragment";
     private View rootView;
     private RecyclerView mRecommendRecyclerView;
-    private RecommendListAdapter mRecommendListAdapter;
+    private AlbumListAdapter mAlbumListAdapter;
     private RecommendPresenter mRecommendPresenter;
     private UILoader mUiLoader;
 
@@ -72,9 +72,9 @@ public class RecommendFragment extends BaseFragment implements IRecommendCallBac
             }
         });
         //设置适配器
-        mRecommendListAdapter = new RecommendListAdapter();
-        mRecommendRecyclerView.setAdapter(mRecommendListAdapter);
-        mRecommendListAdapter.setOnRecommendItemClickListener(this);
+        mAlbumListAdapter = new AlbumListAdapter();
+        mRecommendRecyclerView.setAdapter(mAlbumListAdapter);
+        mAlbumListAdapter.setOnRecommendItemClickListener(this);
         return rootView;
     }
 
@@ -82,7 +82,7 @@ public class RecommendFragment extends BaseFragment implements IRecommendCallBac
     @Override
     public void onRecommendListLoaded(List<Album> result) {
         //成功获取到推荐内容后，调用这个方法以进行UI更新
-        mRecommendListAdapter.setData(result);
+        mAlbumListAdapter.setData(result);
         mUiLoader.updateStatus(UILoader.UIStatus.SUCCESS);
     }
 

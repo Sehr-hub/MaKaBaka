@@ -19,6 +19,6 @@ public interface IPlayerCallback {
     void onProgressChange(int currPos,int duration);//切换播放进度
     void onAdLoading();//广告正在加载
     void onAdFinished();//广告结束
-    void onTrackUpdate(Track track);//更新当前节目内容
+    void onTrackUpdate(Track track,int playIndex);//更新当前节目内容
 
 }
