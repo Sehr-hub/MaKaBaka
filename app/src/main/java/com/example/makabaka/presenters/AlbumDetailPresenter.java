@@ -55,6 +55,7 @@ public class AlbumDetailPresenter implements IAlbumDetailPresenter {
         map.put(DTransferConstants.ALBUM_ID, albumID+"");
         map.put(DTransferConstants.SORT, "asc");
         map.put(DTransferConstants.PAGE, page+"");
+        CommonRequest.getInstanse().setDefaultPagesize(50);//设置返回的专辑详情数量
         CommonRequest.getTracks(map, new IDataCallBack<TrackList>() {
             @Override
             public void onSuccess(TrackList trackList) {

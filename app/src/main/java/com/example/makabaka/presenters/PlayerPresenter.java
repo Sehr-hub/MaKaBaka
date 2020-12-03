@@ -135,10 +135,12 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
 
     @Override
     public void registerViewCallBack(IPlayerCallback iPlayerCallback) {
-        iPlayerCallback.onTrackUpdate(mTrack,mCurrentIndex);
         if (!mIPlayerCallbacks.contains(iPlayerCallback)) {
             mIPlayerCallbacks.add(iPlayerCallback);
         }
+        getPlayList();
+        iPlayerCallback.onTrackUpdate(mTrack,mCurrentIndex);
+
     }
 
     @Override

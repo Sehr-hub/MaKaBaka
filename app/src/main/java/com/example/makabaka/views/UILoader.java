@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.makabaka.DetailActivity;
 import com.example.makabaka.R;
 import com.example.makabaka.base.BaseApplication;
 

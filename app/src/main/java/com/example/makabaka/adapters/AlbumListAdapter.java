@@ -19,7 +19,8 @@ import java.util.List;
 public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.InnerHolder> {
 
     private List<Album> mData=new ArrayList<>();
-    private OnRecommendItemClickListener mItemClickListener=null;
+    private OnAlbumItemClickListener mItemClickListener=null;
+    private OnAlbumItemLongClickListener mLongClickListener=null;
 
     @NonNull
     @Override
@@ -38,11 +39,22 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Inne
             @Override
             public void onClick(View v) {
                 if(mItemClickListener!=null){
-                    mItemClickListener.onItemClick(position,mData.get(position));
+                    int clickPosition=(int)v.getTag();
+                    mItemClickListener.onItemClick(clickPosition,mData.get(clickPosition));
                 }
             }
         });
         holder.setData(mData.get(position));
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mLongClickListener != null) {
+                    int clickPosition=(int)v.getTag();
+                    mLongClickListener.onItemLongClick(mData.get(clickPosition));
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -81,12 +93,22 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Inne
         }
     }
 
-    public void setOnRecommendItemClickListener(OnRecommendItemClickListener listener){
+    public void setAlbumItemClickListener(OnAlbumItemClickListener listener){
         this.mItemClickListener=listener;
     }
 
-    public interface OnRecommendItemClickListener{
+    public interface OnAlbumItemClickListener {
         void onItemClick(int position, Album album);
     }
+
+    public void setOnAlbumItemLongClickListener(OnAlbumItemLongClickListener listener){
+        this.mLongClickListener=listener;
+    }
+
+    public interface OnAlbumItemLongClickListener{
+        void onItemLongClick(Album album);
+    }
+
+
 
 }

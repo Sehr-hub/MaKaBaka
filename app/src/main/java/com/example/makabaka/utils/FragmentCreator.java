@@ -2,7 +2,7 @@ package com.example.makabaka.utils;
 
 import com.example.makabaka.base.BaseFragment;
 import com.example.makabaka.fragments.HistoryFragment;
-import com.example.makabaka.fragments.RecommendFragment;
+import com.example.makabaka.fragments.AlbumFragment;
 import com.example.makabaka.fragments.SubscriptionFragment;
 
 import java.util.HashMap;
@@ -25,7 +25,7 @@ public class FragmentCreator {
         }
         switch (index){
             case INDEX_RECOMMEND:
-                baseFragment=new RecommendFragment();
+                baseFragment=new AlbumFragment();
                 break;
             case INDEX_SUBSCRIPTION:
                 baseFragment=new SubscriptionFragment();

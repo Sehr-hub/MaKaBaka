@@ -44,7 +44,7 @@ import net.lucode.hackware.magicindicator.buildins.UIUtil;
 
 import java.util.List;
 
-public class DetailActivity extends BaseActivity implements IAlbumDetailViewCallback, DetailListAdapter.ItemClickListener, IPlayerCallback, ISubscriptionCallback {
+public class DetailActivity extends BaseActivity implements IAlbumDetailViewCallback, DetailListAdapter.ItemClickListener, IPlayerCallback, ISubscriptionCallback, UILoader.onRetryClickListener {
 
     private static final String TAG = "DetailActivity";
     private ImageView mLargeCover;
@@ -53,6 +53,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     private TextView mAlbumAuthor;
     private AlbumDetailPresenter mAlbumDetailPresenter;
     private int mCurrentPage=1;
+    private long mCurrentId = -1;
     private RecyclerView mDetailList;
     private DetailListAdapter mDetailListAdapter;
     private FrameLayout mDetailListContainer;
@@ -122,6 +123,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
                     }
                 }
             });
+
     }
 
     @Override
@@ -151,6 +153,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
             };
             mDetailListContainer.removeAllViews();
             mDetailListContainer.addView(mUiLoader);
+            mUiLoader.setOnRetryClickListener(DetailActivity.this);
         }
         mLargeCover = this.findViewById(R.id.iv_large_cover);
         mSmallCover = this.findViewById(R.id.iv_small_cover);
@@ -210,6 +213,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     @Override
     public void onAlbumLoaded(Album album) {
         this.mCurrentAlbum=album;
+        mCurrentId=album.getId();
         if(mAlbumTitle!=null){
             mAlbumTitle.setText(album.getAlbumTitle());
         }
@@ -241,7 +245,6 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         if(mUiLoader!=null){
             mUiLoader.updateStatus(UILoader.UIStatus.LOADING);
         }
-
     }
 
     @Override
@@ -352,5 +355,13 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     @Override
     public void onSubscriptionsLoaded(List<Album> albums) {
         //当前界面无需处理
+    }
+
+    @Override
+    public void onRetryClick() {
+        //用户网络不佳的时候 去点击了重新加载
+        if (mAlbumDetailPresenter != null) {
+            mAlbumDetailPresenter.getAlbumDetail(mCurrentId, mCurrentPage);
+        }
     }
 }
