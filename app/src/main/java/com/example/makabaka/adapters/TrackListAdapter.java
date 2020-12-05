@@ -15,13 +15,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DetailListAdapter  extends RecyclerView.Adapter<DetailListAdapter.InnerHolder> {
+public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.InnerHolder> {
 
     private List<Track> mDetailData=new ArrayList<>();
     private SimpleDateFormat mSimpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
     private SimpleDateFormat mMinDurationFormat=new SimpleDateFormat("mm:ss");
     private SimpleDateFormat mHourDurationFormat=new SimpleDateFormat("hh:mm:ss");
     private ItemClickListener mItemClickListener=null;
+    private ItemLongClickListener mItemLongClickListener=null;
 
     @NonNull
     @Override
@@ -60,6 +61,15 @@ public class DetailListAdapter  extends RecyclerView.Adapter<DetailListAdapter.I
                 }
             }
         });
+        itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mItemLongClickListener != null) {
+                    mItemLongClickListener.onItemLongClick(track);
+                }
+                return true;
+            }
+        });
 
     }
 
@@ -89,6 +99,14 @@ public class DetailListAdapter  extends RecyclerView.Adapter<DetailListAdapter.I
 
     public interface ItemClickListener{
         void onItemClick(List<Track> detailData, int position);
+    }
+
+    public void setItemLongClickListener(ItemLongClickListener listener){
+        this.mItemLongClickListener=listener;
+    }
+
+    public interface ItemLongClickListener{
+        void onItemLongClick(Track track);
     }
 
 }

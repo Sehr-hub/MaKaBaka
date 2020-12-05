@@ -21,7 +21,7 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.makabaka.adapters.DetailListAdapter;
+import com.example.makabaka.adapters.TrackListAdapter;
 import com.example.makabaka.base.BaseActivity;
 import com.example.makabaka.interfaces.IAlbumDetailViewCallback;
 import com.example.makabaka.interfaces.IPlayerCallback;
@@ -44,7 +44,7 @@ import net.lucode.hackware.magicindicator.buildins.UIUtil;
 
 import java.util.List;
 
-public class DetailActivity extends BaseActivity implements IAlbumDetailViewCallback, DetailListAdapter.ItemClickListener, IPlayerCallback, ISubscriptionCallback, UILoader.onRetryClickListener {
+public class DetailActivity extends BaseActivity implements IAlbumDetailViewCallback, TrackListAdapter.ItemClickListener, IPlayerCallback, ISubscriptionCallback, UILoader.onRetryClickListener {
 
     private static final String TAG = "DetailActivity";
     private ImageView mLargeCover;
@@ -55,7 +55,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     private int mCurrentPage=1;
     private long mCurrentId = -1;
     private RecyclerView mDetailList;
-    private DetailListAdapter mDetailListAdapter;
+    private TrackListAdapter mTrackListAdapter;
     private FrameLayout mDetailListContainer;
     private UILoader mUiLoader;
     private ImageView mPlayCtrBtn;
@@ -172,8 +172,8 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         LinearLayoutManager layoutManager=new LinearLayoutManager(this);
         mDetailList.setLayoutManager(layoutManager);
         //设置适配器
-        mDetailListAdapter = new DetailListAdapter();
-        mDetailList.setAdapter(mDetailListAdapter);
+        mTrackListAdapter = new TrackListAdapter();
+        mDetailList.setAdapter(mTrackListAdapter);
         //设置item上下间距
         mDetailList.addItemDecoration(new RecyclerView.ItemDecoration() {
             //重写方法，设置每个项目之间的间距，让其能够显示出灰色背景，显得美观一些
@@ -185,7 +185,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
                 outRect.right= UIUtil.dip2px(view.getContext(),5);
             }
         });
-        mDetailListAdapter.setItemClickListener(this);
+        mTrackListAdapter.setItemClickListener(this);
         return detailListView;
     }
 
@@ -201,7 +201,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
             mUiLoader.updateStatus(UILoader.UIStatus.SUCCESS);
         }
         //设置或更新UI数据
-        mDetailListAdapter.setData(tracks);
+        mTrackListAdapter.setData(tracks);
     }
 
 
